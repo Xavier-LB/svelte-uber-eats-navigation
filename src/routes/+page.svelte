@@ -2,9 +2,8 @@
 	import { browser } from '$app/environment';
 
 	let titleInFocus: string = '';
-	let xScroll: HTMLElement;
 
-	function enterViewPort(e: HTMLElement) {
+	export function enterViewPort(e: HTMLElement) {
 		const observer = new IntersectionObserver((entries) => {
 			if (entries[0].isIntersecting) {
 				titleInFocus = e.id;
@@ -56,6 +55,7 @@
 		'Pork'
 	];
 
+	let xScroll: HTMLElement;
 	$: {
 		if (browser) {
 			let targetElement = document.getElementById(`nav-${titleInFocus}`);
@@ -67,29 +67,49 @@
 	}
 </script>
 
-<nav bind:this={xScroll}>
+<nav
+	class="m-auto fixed inset-x-0 mx-auto bg-[#3d9a1e] flex overflow-x-scroll px-2 py-3"
+	bind:this={xScroll}
+>
 	{#each categories as cat}
 		<button
-			class:button-selected={titleInFocus === cat}
+			class:selected-button={titleInFocus === cat}
 			id={`nav-${cat}`}
 			on:click={() => {
 				document?.getElementById(cat)?.scrollIntoView();
-			}}>{cat}</button
+			}}
+			class=" text-white bg-[#ffffff22] rounded-full px-3 py-2 mx-1">{cat}</button
 		>
 	{/each}
 </nav>
 
 <br />
 <br />
+<br />
+<br />
 
-<div>
+<div class=" max-w-xl m-auto font-mono text-[#1c1c1ce4]">
+	<h1 class="m-1 font-bold text-3xl">Uber Like Navigation <br /> in Svelte</h1>
+	<div class="bg-[#F6F6F6] p-3 py-4 m-1 rounded">
+		Scroll down to see the navigation in action, or click on the buttons to scroll to the section.
+		<br />
+		<br />
+		<p>
+			See <a href="https://lebaux.co/blog/svelte-uber-eats" target="_blank" class="underline"
+				>blog post</a
+			> for more details on the implementation.
+		</p>
+	</div>
 	{#each categories as cat}
 		<br />
-		<h2 use:enterViewPort id={cat}>
+		<h2 class="m-1 text-2xl font-bold scroll-my-32" use:enterViewPort id={cat}>
 			{cat}
 		</h2>
 		{#each dishes as dish}
-			<p>{dish}</p>
+			<div class="flex justify-between bg-[#F6F6F6] hover:bg-[#ececec] p-3 m-1 rounded">
+				<p>{dish}</p>
+				<p class=" italic">$7.50</p>
+			</div>
 		{/each}
 	{/each}
 </div>
@@ -99,25 +119,12 @@
 <br />
 <br />
 <br />
+<br />
+<br />
+<br />
 
 <style>
-	nav {
-		position: fixed;
-		top: 0;
-		left: 0;
-		right: 0;
-		background-color: #5aa370;
-		display: flex;
-		overflow-x: scroll;
-		padding: 0.5rem 1rem;
-	}
-
-	.button-selected {
-		background-color: skyblue;
-	}
-
-	h2 {
-		/* by default is set to 0, so after clicking it would endup behind the nav bar */
-		scroll-margin: 60px;
+	.selected-button {
+		background-color: #ffffff55;
 	}
 </style>
